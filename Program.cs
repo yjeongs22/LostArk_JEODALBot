@@ -8,6 +8,9 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using MongoDB.Driver;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 
 // 단일 캐릭터 정보
 public class UserRaidInfo
@@ -413,25 +416,55 @@ class Program
     {
         try
         {
-            string jsonString = JsonSerializer.Serialize(_userDatabase, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(_dbFilePath, jsonString);
+            foreach (var entry in _userDatabase)
+            {
+                string userIdStr = entry.Key.ToString();
+                var profileBson = entry.Value.ToBsonDocument();
+
+                // 기존 데이터가 있으면 업데이트(Upsert), 없으면 생성
+                var filter = Builders<BsonDocument>.Filter.Eq("userId", userIdStr);
+                var update = Builders<BsonDocument>.Update
+                    .Set("userId", userIdStr)
+                    .Set("profile", profileBson);
+
+                _collection.UpdateOne(filter, update, new UpdateOptions { IsUpsert = true });
+            }
+            Console.WriteLine("✅ DB에 데이터를 저장했습니다.");
         }
-        catch (Exception) { }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ DB 저장 실패: {ex.Message}");
+        }
     }
 
     private void LoadDatabase()
     {
         try
         {
-            if (File.Exists(_dbFilePath))
+            // 괄호 다 지우고 비밀번호까지 넣은 실제 주소를 여기에 넣어!
+            var connectionString = "mongodb+srv://yjeongs22:yjeongs22ppppp@cluster0.3ngir1y.mongodb.net/";
+
+            var client = new MongoClient(connectionString);
+            var database = client.GetDatabase("RaidBot");
+            _collection = database.GetCollection<BsonDocument>("Users");
+
+            var filter = new BsonDocument();
+            var documents = _collection.Find(filter).ToList();
+
+            _userDatabase = new Dictionary<ulong, UserProfile>();
+            foreach (var doc in documents)
             {
-                string jsonString = File.ReadAllText(_dbFilePath);
-                _userDatabase = JsonSerializer.Deserialize<Dictionary<ulong, UserProfile>>(jsonString) ?? new Dictionary<ulong, UserProfile>();
+                // DB에서 가져올 때 필드명이 "userId"와 "profile"인지 꼭 확인해!
+                ulong userId = ulong.Parse(doc["userId"].AsString);
+                var profile = BsonSerializer.Deserialize<UserProfile>(doc["profile"].AsBsonDocument);
+                _userDatabase[userId] = profile;
             }
+            Console.WriteLine("✅ DB에서 데이터를 성공적으로 불러왔습니다.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"초기 로드 실패 (기존 user_data.json 파일이 있으면 삭제하세요!): {ex.Message}");
+            Console.WriteLine($"❌ DB 로드 실패: {ex.Message}");
         }
     }
+}
 }
