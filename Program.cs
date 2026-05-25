@@ -36,18 +36,15 @@ class Program
 {
     private DiscordSocketClient _client = null!;
     private readonly HttpClient _httpClient = new HttpClient();
-    private Dictionary<ulong, UserProfile> _userDatabase = new Dictionary<ulong, UserProfile>();
-
     private IMongoCollection<BsonDocument> _collection = null!;
 
     // 데이터베이스 구조 변경 (유저ID -> 유저프로필)
     private Dictionary<ulong, UserProfile> _userDatabase = new Dictionary<ulong, UserProfile>();
     private readonly string _dbFilePath = "user_data.json";
 
-    private readonly string _lostArkApiKey = Environment.GetEnvironmentVariable("LOSTARK_API_KEY") ?? "";
-
     // ★ 로스트아크 API 키
     private readonly string _lostArkApiKey = Environment.GetEnvironmentVariable("LOSTARK_API_KEY") ?? "";
+
 
     static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
