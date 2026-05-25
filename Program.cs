@@ -19,6 +19,8 @@ public class UserRaidInfo
     public string ServerName { get; set; } = "";
     public string ClassName { get; set; } = "";
     public string ItemLevel { get; set; } = "";
+    public bool IsSupport { get; set; }
+    public string RoleIcon { get; set; } = "";
 
     // 직업군 자동 분류 (서포터 판독기)
     public bool IsSupport => ClassName == "바드" || ClassName == "홀리나이트" || ClassName == "도화가";
