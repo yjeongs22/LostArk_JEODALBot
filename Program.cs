@@ -443,7 +443,10 @@ class Program
     {
         try
         {
-            // 괄호 다 지우고 비밀번호까지 넣은 실제 주소를 여기에 넣어!
+            // ★ 아래 세 줄을 추가하면 에러가 싹 사라집니다!
+            var pack = new MongoDB.Bson.Serialization.Conventions.ConventionPack { new MongoDB.Bson.Serialization.Conventions.IgnoreExtraElementsConvention(true) };
+            MongoDB.Bson.Serialization.Conventions.ConventionRegistry.Register("IgnoreExtra", pack, t => true);
+
             var connectionString = "mongodb+srv://yjeongs22:yjeongs22ppppp@cluster0.3ngir1y.mongodb.net/";
 
             var client = new MongoClient(connectionString);
