@@ -80,6 +80,7 @@ class Program
         Console.WriteLine(msg.ToString());
         return Task.CompletedTask;
     }
+    //.
 
     private async Task Client_Ready()
     {
