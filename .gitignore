@@ -3,6 +3,20 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# 데이터 파일 제외
+
+user_data.json
+
+
+
+# 설정 파일 등 제외
+
+bin/
+
+obj/
+
+.vs/
+
 # User-specific files
 *.rsuser
 *.suo
