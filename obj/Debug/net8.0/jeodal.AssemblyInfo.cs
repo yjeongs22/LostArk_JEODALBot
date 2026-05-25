@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("jeodal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+922972f81efcf2b5c7061c725d5dd95ff122a84e")]
 [assembly: System.Reflection.AssemblyProductAttribute("jeodal")]
 [assembly: System.Reflection.AssemblyTitleAttribute("jeodal")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
