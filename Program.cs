@@ -40,8 +40,7 @@ class Program
     private readonly Dictionary<ulong, Dictionary<string, ulong>> _serverRaidRoles = new Dictionary<ulong, Dictionary<string, ulong>>
 {
     { 1378050723476144268L, new Dictionary<string, ulong> {
-        { "1막: 대지를 부수는 업화의 궤적_노말", 000000000000000000L }, // 여기에 서버1 역할ID 입력
-        { "1막: 대지를 부수는 업화의 궤적_하드", 000000000000000000L }
+        { "1막: 대지를 부수는 업화의 궤적_노말", 1509207031154999590 }, // 여기에 서버1 역할ID 입력
     }},
     { 1284878074692763668L, new Dictionary<string, ulong> { // 여기에 서버2 역할ID 입력
         { "1막: 대지를 부수는 업화의 궤적_하드", 1509202823357923499 },
