@@ -45,9 +45,6 @@ class Program
     { 1284878074692763668L, new Dictionary<string, ulong> { // 여기에 서버2 역할ID 입력
         { "1막: 대지를 부수는 업화의 궤적_하드", 1509202823357923499 },
         { "2막: 부유하는 악몽의 진혼곡_하드", 1509202896955244635 },
-        { "2막: 부유하는 악몽의 진혼곡_익스트림 노말", 1509202981222879282 },
-        { "2막: 부유하는 악몽의 진혼곡_익스트림 하드", 1509203026039144581 },
-        { "2막: 부유하는 악몽의 진혼곡_익스트림 나이트메어", 1509203054786777271 },
         { "3막: 칠흑, 폭풍의 밤_하드", 1509203139922760045 },
         { "4막: 파멸의 성채_노말", 1509203167525736580 },
         { "4막: 파멸의 성채_하드", 1509203191873536020 },
@@ -374,22 +371,15 @@ class Program
             switch (selectedBoss)
             {
                 case "1막: 대지를 부수는 업화의 궤적":
-                    results.Add(new AutocompleteResult("노말", "노말"));
                     results.Add(new AutocompleteResult("하드", "하드"));
                     break;
                 case "2막: 부유하는 악몽의 진혼곡":
-                    results.Add(new AutocompleteResult("노말", "노말"));
                     results.Add(new AutocompleteResult("하드", "하드"));
-                    results.Add(new AutocompleteResult("익스트림 노말", "익스트림 노말"));
-                    results.Add(new AutocompleteResult("익스트림 하드", "익스트림 하드"));
-                    results.Add(new AutocompleteResult("익스트림 나이트메어", "익스트림 나이트메어"));
                     break;
                 case "3막: 칠흑, 폭풍의 밤":
-                    results.Add(new AutocompleteResult("노말", "노말"));
                     results.Add(new AutocompleteResult("하드", "하드"));
                     break;
                 case "4막: 파멸의 성채":
-                    results.Add(new AutocompleteResult("노말", "노말"));
                     results.Add(new AutocompleteResult("하드", "하드"));
                     break;
                 case "종막: 최후의 날":
