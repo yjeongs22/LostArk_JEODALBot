@@ -37,6 +37,32 @@ class Program
     private readonly HttpClient _httpClient = new HttpClient();
     private IMongoCollection<BsonDocument> _collection = null!;
 
+    private readonly Dictionary<ulong, Dictionary<string, ulong>> _serverRaidRoles = new Dictionary<ulong, Dictionary<string, ulong>>
+{
+    { 1378050723476144268L, new Dictionary<string, ulong> {
+        { "1막: 대지를 부수는 업화의 궤적_노말", 000000000000000000L }, // 여기에 서버1 역할ID 입력
+        { "1막: 대지를 부수는 업화의 궤적_하드", 000000000000000000L }
+    }},
+    { 1284878074692763668L, new Dictionary<string, ulong> { // 여기에 서버2 역할ID 입력
+        { "1막: 대지를 부수는 업화의 궤적_하드", 1509202823357923499 },
+        { "2막: 부유하는 악몽의 진혼곡_하드", 1509202896955244635 },
+        { "2막: 부유하는 악몽의 진혼곡_익스트림 노말", 1509202981222879282 },
+        { "2막: 부유하는 악몽의 진혼곡_익스트림 하드", 1509203026039144581 },
+        { "2막: 부유하는 악몽의 진혼곡_익스트림 나이트메어", 1509203054786777271 },
+        { "3막: 칠흑, 폭풍의 밤_하드", 1509203139922760045 },
+        { "4막: 파멸의 성채_노말", 1509203167525736580 },
+        { "4막: 파멸의 성채_하드", 1509203191873536020 },
+        { "종막: 최후의 날_노말", 1509203502042185778 },
+        { "종막: 최후의 날_하드", 1509203525022912542 },
+        { "고통의 마녀, 세르카_노말", 1509203235104362807 },
+        { "고통의 마녀, 세르카_하드", 1509203264380473415 },
+        { "고통의 마녀, 세르카_나이트메어", 1509205821257547896 },
+        { "지평의 성당_1단계", 1509203294671736883 },
+        { "지평의 성당_2단계", 1509203412422754486 },
+        { "지평의 성당_3단계", 1509203468718702603 }
+    }}
+};
+
     // 데이터베이스 구조 변경 (유저ID -> 유저프로필)
     private Dictionary<ulong, UserProfile> _userDatabase = new Dictionary<ulong, UserProfile>();
     private readonly string _dbFilePath = "user_data.json";
@@ -171,6 +197,18 @@ class Program
                 string difficulty = command.Data.Options.First(x => x.Name == "난이도").Value.ToString()!;
                 string time = command.Data.Options.First(x => x.Name == "시간").Value.ToString()!;
 
+                // 1. 보스와 난이도를 조합해 키 생성
+                string raidKey = $"{boss}_{difficulty}";
+
+                // 2. 현재 서버 ID로 역할 찾기
+                ulong guildId = command.GuildId ?? 0;
+                string roleMention = "";
+
+                if (_serverRaidRoles.ContainsKey(guildId) && _serverRaidRoles[guildId].ContainsKey(raidKey))
+                {
+                    roleMention = $"<@&{_serverRaidRoles[guildId][raidKey]}>";
+                }
+
                 var embed = new EmbedBuilder()
                     .WithTitle($"⚔️ {boss} [{difficulty}] 레이드 모집")
                     .WithDescription($"**출발 시간:** {time}\n\n**참가자 명단:**\n(아직 참가자가 없습니다.)")
@@ -181,7 +219,9 @@ class Program
                     .WithButton("참가하기", "btn_join", ButtonStyle.Success)
                     .WithButton("취소하기", "btn_cancel", ButtonStyle.Danger);
 
-                await command.RespondAsync(embed: embed, components: builder.Build());
+                // 3. 멘션과 함께 전송
+                string content = string.IsNullOrEmpty(roleMention) ? "모집 글이 올라왔습니다!" : $"{roleMention} 모집합니다!";
+                await command.RespondAsync(text: content, embed: embed, components: builder.Build());
             }
             else if (command.Data.Name == "연동")
             {
